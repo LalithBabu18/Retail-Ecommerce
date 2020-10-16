@@ -11,6 +11,10 @@
           <b-navbar-nav class="ml-auto">
             <b-nav-item right>
               <!-- Using 'button-content' slot -->
+              <!-- <p>{{ this.UserName }}</p> -->
+              <v-button style="margin-right:80px"
+                ><strong>Welcome {{ this.UserName }}</strong></v-button
+              >
               <v-button @click="AddCat" style="margin-right:30px"
                 >Add Categories</v-button
               >
@@ -380,6 +384,7 @@ export default {
   data() {
     return {
       SubName: "",
+      UserName: "",
       categorySelected2: [],
       subCatSelected1: [],
       name: "",
@@ -429,6 +434,7 @@ export default {
     }
   },
   async created() {
+    this.UserName = await localforage.getItem("name");
     const auth_token = await localforage.getItem("my_access_token");
     let categorySelected1 = this.categorySelected2.toString();
     let subCatSelected2 = this.subCatSelected1.toString();

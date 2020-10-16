@@ -40,8 +40,8 @@ for (const component in mdbvue) {
 }
 
 
-const ENV_PATH = require(`@/environments/environment.${process.env.VUE_APP_ENV_PATH}.js`);
-console.log(ENV_PATH.ENV);
+// const ENV_PATH = require(`@/environments/environment.${process.env.VUE_APP_ENV_PATH}.js`);
+// console.log(ENV_PATH.ENV);
 
 let {
     API_BASE_URI,
