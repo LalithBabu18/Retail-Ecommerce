@@ -137,9 +137,33 @@
     <button @click="onFileChange">Submit</button> -->
     <div id="parent">
       <div id="left">
-        <b-button @click="AddCat" style="margin-right:30px"
-          >Add Categories</b-button
+        <b-button
+          type="button"
+          class="btn btn-success btn-md pull-right"
+          :id="1"
+          @click="$bvModal.show(1)"
         >
+          Add Category
+        </b-button>
+        <div>
+          <b-modal :id="1" hide-footer>
+            <template v-slot:modal-title>
+              <code>Enter Name of the category</code>
+            </template>
+            <div class="d-block text-center">
+              <input
+                type="text"
+                class="login-input"
+                placeholder="category"
+                v-model="name"
+                required
+              />
+            </div>
+            <b-button type="submit" class="mt-3" block @click="addCategory"
+              >Add Category</b-button
+            >
+          </b-modal>
+        </div>
         <treeview v-for="(item, index) in list" :key="item.id">
           <li data-expanded="false">
             <span class="k-icon k-i-folder"></span>
@@ -388,6 +412,7 @@ export default {
     return {
       SubName: "",
       UserName: "",
+      Categoryname: "",
       categorySelected2: [],
       subCatSelected1: [],
       name: "",
@@ -507,6 +532,56 @@ export default {
     });
   },
   methods: {
+    async addCategory() {
+      let form = {
+        name: this.name
+      };
+      const auth_token = await localforage.getItem("my_access_token");
+      let token = String(auth_token);
+      const postBody = {
+        method: "POST",
+        body: JSON.stringify(form),
+        headers: {
+          Authorization: token,
+          "Content-Type": "application/json"
+        }
+      };
+
+      console.log(postBody);
+      const response = fetch(
+        `https://ecomuvaca.herokuapp.com/api/Category/addCategory`,
+        postBody
+      )
+        // console.log(response, "Added");
+        .then(() => {
+          userReports.getList().then(resp => {
+            if (!resp.error) {
+              console.log(resp, "getList");
+              let data = resp;
+              let dataMod = data.map(d => {
+                let sub = _.chunk(d[1], 2);
+                let subCategoryArr = sub.map(s => {
+                  return { ...s[0], items: s[1] };
+                });
+                return { ...d[0], subCategoryArr };
+              });
+
+              console.log(dataMod, "dat5a");
+              this.list = dataMod;
+              console.log(this.list, "list");
+              console.log(this.list.subCategoryArr, "list2");
+            } else {
+              console.log("error in getting lists");
+            }
+          });
+        })
+        .then(() => {
+          alert("updated");
+          this.$bvModal.hide(1);
+          this.name = "";
+        });
+      // console.log(response, "updated");
+    },
     async addItems(subid, catid) {
       let form = {
         name: this.itemName
