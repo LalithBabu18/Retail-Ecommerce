@@ -15,9 +15,9 @@
               <v-button style="margin-right:80px"
                 ><strong>Welcome {{ this.UserName }}</strong></v-button
               >
-              <v-button @click="AddCat" style="margin-right:30px"
+              <!-- <v-button @click="AddCat" style="margin-right:30px"
                 >Add Categories</v-button
-              >
+              > -->
 
               <v-button @click="logout">Sign Out</v-button>
             </b-nav-item>
@@ -137,6 +137,9 @@
     <button @click="onFileChange">Submit</button> -->
     <div id="parent">
       <div id="left">
+        <b-button @click="AddCat" style="margin-right:30px"
+          >Add Categories</b-button
+        >
         <treeview v-for="(item, index) in list" :key="item.id">
           <li data-expanded="false">
             <span class="k-icon k-i-folder"></span>
@@ -364,7 +367,7 @@
             ></b-form-checkbox-group>
           </b-form-group>
           <b-card-footer v-for="j in onMountStocks[1]" :key="j.id">{{
-            j
+            j.name
           }}</b-card-footer>
         </div>
       </div>
