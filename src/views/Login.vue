@@ -1,97 +1,100 @@
 <template>
-  <div >
+  <div>
     <div>
       <div v-if="accountFlag">{{ accountFlag }}</div>
       <div class="notification notification--error" v-if="loginFlag == false">
         Now that your login flag is:
-        <b>{{ loginFlag }}</b>, please retry to login again
+        <b>{{ loginFlag }}</b
+        >, please retry to login again
       </div>
 
-      <div
-        v-if="accountFlag"
-        class="notification notification-success"
-         
-      >Now that your account is created, you can log in here.</div>
+      <div v-if="accountFlag" class="notification notification-success">
+        Now that your account is created, you can log in here.
+      </div>
       <div>
-        <div class="" >
-        <div class="col-md-6  m-auto">
-          <div class="card card-body back">
-            <h1 class="text-center">
-              <span class="login">Login</span>
+        <div class="">
+          <div class="col-md-6  m-auto">
+            <div class="card card-body back">
+              <h1 class="text-center">
+                <span class="login">Login</span>
               </h1>
-                <!-- <label
+              <!-- <label
                   data-v-44cc07f6
                   padding-left
                   class="err-lbl"
                   style="color: rgb(240, 65, 65);"
                 >{{ errors2[0] }}</label> -->
-            <form action>
-              <div class="form-group">
-                <label>User Name</label>
-                <input
-                  typeof="User Name"
-                  id="email"
-                  type="text"
-                  placeholder="UserName"
-                  v-model="email"
-                  ref="User Name"
-                  required
-                  class="form-control"
-                />
-                <label
-                  data-v-44cc07f6
-                  padding-left
-                  class="err-lbl"
-                  style="color: rgb(240, 65, 65);"
-                >{{ errors[0] }}</label>
-              </div>
-              <div class="form-group">
-                <label>Password</label>
-                <input
-                  id="password"
-                  ref="password"
-                  v-model="password"
-                  :type="passwordFieldType"
-                  required
-                  class="form-control"
-                  placeholder="Enter Password"
-                >
-                <!-- <i class="fa fa-eye" aria-hidden="true" type="password" @click="switchVisibility"></i> -->
-            
-                 <label
-                  data-v-44cc07f6
-                  padding-left
-                  class="err-lbl"
-                  style="color: rgb(240, 65, 65);"
-                >{{ errors1[0] }}</label>
-              </div>
-              <!-- <button
+              <form action>
+                <div class="form-group">
+                  <label>User Name</label>
+                  <input
+                    typeof="User Name"
+                    id="email"
+                    type="text"
+                    placeholder="UserName"
+                    v-model="email"
+                    ref="User Name"
+                    required
+                    class="form-control"
+                  />
+                  <label
+                    data-v-44cc07f6
+                    padding-left
+                    class="err-lbl"
+                    style="color: rgb(240, 65, 65);"
+                    >{{ errors[0] }}</label
+                  >
+                </div>
+                <div class="form-group">
+                  <label>Password</label>
+                  <input
+                    id="password"
+                    ref="password"
+                    v-model="password"
+                    :type="passwordFieldType"
+                    required
+                    class="form-control"
+                    placeholder="Enter Password"
+                  />
+                  <!-- <i class="fa fa-eye" aria-hidden="true" type="password" @click="switchVisibility"></i> -->
+
+                  <label
+                    data-v-44cc07f6
+                    padding-left
+                    class="err-lbl"
+                    style="color: rgb(240, 65, 65);"
+                    >{{ errors1[0] }}</label
+                  >
+                </div>
+                <!-- <button
             @click="login"
             class="btn btn-primary btn-block"
           >
             Login
               </button>-->
-            </form>
-            <button
-              color="primary"
-              expand="full"
-              @click="login"
-              class="btn btn-primary btn-block"
-            >Log In</button>
-             <div class="txt1 text-center p-t-54 p-b-20">
+              </form>
+              <button
+                color="primary"
+                expand="full"
+                @click="login"
+                class="btn btn-primary btn-block"
+              >
+                Log In
+              </button>
+              <!-- <div class="txt1 text-center p-t-54 p-b-20">
               <span> Don't You have a Merchnat account?</span>
               <button class="create-account-btn"  @click="createCustomertAccount">Create Customer Account</button>
+            </div> -->
+              <div class="txt1 text-center p-t-54 p-b-20">
+                <span> Don't You have account?</span>
+                <button class="create-account-btn" @click="createAccount">
+                  Create Account
+                </button>
+              </div>
             </div>
-             <div class="txt1 text-center p-t-54 p-b-20">
-              <span> Don't You have a Customer account?</span>
-              <button class="create-account-btn"  @click="createAccount">Create Merchnat Account</button>
-            </div>
-           
           </div>
         </div>
       </div>
-      </div>
-      
     </div>
   </div>
 </template>
@@ -112,10 +115,10 @@ export default {
       email: "",
       password: "",
       backgroundUrl,
-       errors: [],
+      errors: [],
       errors1: [],
       errors2: [],
-      passwordFieldType: 'password'
+      passwordFieldType: "password"
     };
   },
   // created() {
@@ -132,7 +135,7 @@ export default {
   },
   methods: {
     ...mapActions("account", ["login"]),
-     login() {
+    login() {
       if (!this.email) {
         this.errors.push("User Name is required.");
       }
@@ -143,37 +146,33 @@ export default {
         email: this.email,
         password: this.password
       };
-      const verr =  localforage.getItem("err");
-      if(verr){
+      const verr = localforage.getItem("err");
+      if (verr) {
         this.errors2.push("Invalid Email or Password");
-
       }
       this.$store.dispatch("account/login", payload, { root: true });
-      
     },
-      switchVisibility() {
-      this.passwordFieldType = this.passwordFieldType === 'password' ? 'text' : 'password'
+    switchVisibility() {
+      this.passwordFieldType =
+        this.passwordFieldType === "password" ? "text" : "password";
     },
     createAccount() {
-      router.push("/SignUp")
+      router.push("/SignUp");
     },
     createCustomertAccount() {
-      router.push("/CustomerSignup")
+      router.push("/CustomerSignup");
     }
   }
 };
 </script>
 
 <style scoped>
-
 .back {
-  background-image: url('../assets/bg-01.jpg');
+  background-image: url("../assets/bg-01.jpg");
   height: 80vh;
-  
 }
 .login {
-  
-color: aliceblue;
+  color: aliceblue;
 }
 .create-account-btn {
   margin-left: 5px;
@@ -195,7 +194,7 @@ color: aliceblue;
   appearance: none;
 }
 
-.txt1{
+.txt1 {
   margin-top: 30px;
 }
 
