@@ -362,13 +362,13 @@
           <div>
             <b-modal :id="item.id" hide-footer>
               <template v-slot:modal-title>
-                <code>Enter Name of the category</code>
+                <code>Enter Name of the Subcategory</code>
               </template>
               <div class="d-block text-center">
                 <input
                   type="text"
                   class="login-input"
-                  placeholder="category"
+                  placeholder="Sub-category"
                   v-model="SubName"
                   required
                 />
@@ -387,7 +387,19 @@
               @change="selectCategory"
               v-model="categorySelected2"
               :options="onMountStocks[0]"
-              :value-field="onMountStocks[0].id"
+              class="mb-3"
+              value-field="id"
+              text-field="name"
+            ></b-form-checkbox-group>
+          </b-form-group>
+          <b-form-group label="Filter Using:" v-if="onMountStocks[2]">
+            <b-form-checkbox-group
+              @change="selectCategory"
+              v-model="categorySelected2"
+              :options="onMountStocks[2]"
+              class="mb-3"
+              value-field="id"
+              text-field="name"
             ></b-form-checkbox-group>
           </b-form-group>
           <b-card-footer v-for="j in onMountStocks[1]" :key="j.id">{{
@@ -464,8 +476,8 @@ export default {
   async created() {
     this.UserName = await localforage.getItem("name");
     const auth_token = await localforage.getItem("my_access_token");
-    let categorySelected1 = this.categorySelected2.toString();
-    let subCatSelected2 = this.subCatSelected1.toString();
+    let categorySelected1 = "";
+    let subCatSelected2 = "";
     console.log(subCatSelected2, "subCatSelected2");
     const postBody = {
       method: "GET",
@@ -479,10 +491,10 @@ export default {
 
       postBody
     );
-    console.log(response, "onMountStocks");
+    console.log(response, "onMountStocksCreated");
 
     const data = await response.json();
-    console.log(data, "reportHistory");
+    console.log(data, "categoryNullkkkkkkkk");
 
     if (!data.error) {
       this.onMountStocks = data;
@@ -942,7 +954,7 @@ export default {
         .then(() => {
           alert("updated");
           this.$bvModal.hide(id);
-          this.name = "";
+          this.SubName = "";
         });
       // console.log(response, "updated");
     },
@@ -1246,10 +1258,10 @@ export default {
 
         postBody
       );
-      console.log(response, "onMountStocks");
+      console.log(response, "onMountStocksCategory");
 
       const data = await response.json();
-      console.log(data, "reportHistory");
+      console.log(data, "filterBy category");
 
       if (!data.error) {
         this.onMountStocks = data;
