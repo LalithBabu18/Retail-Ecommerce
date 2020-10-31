@@ -174,7 +174,7 @@ export default {
       }
     };
     const response = await fetch(
-      `https://ecomuvaca.herokuapp.com/api/Category/${this.$route.params.id}/getSubCategoryByCategoryId`,
+      `http://localhost:8085/api/Category/${this.$route.params.id}/getSubCategoryByCategoryId`,
 
       postBody
     );
@@ -207,7 +207,7 @@ export default {
         }
       };
       const response = await fetch(
-        `https://ecomuvaca.herokuapp.com/api/Category/${id}/subCategory `,
+        `http://localhost:8085/api/Category/${id}/subCategory `,
 
         postBody
       );
@@ -241,7 +241,7 @@ export default {
 
       console.log(postBody);
       const response = await fetch(
-        `https://ecomuvaca.herokuapp.com/api/Category/${id}/modifySubCategory`,
+        `http://localhost:8085/api/Category/${id}/modifySubCategory`,
         postBody
       )
         .then(() => {
@@ -259,7 +259,7 @@ export default {
             }
           };
           const response = await fetch(
-            `https://ecomuvaca.herokuapp.com/api/Category/${this.$route.params.id}/getSubCategoryByCategoryId`,
+            `http://localhost:8085/api/Category/${this.$route.params.id}/getSubCategoryByCategoryId`,
 
             postBody
           );
@@ -293,7 +293,7 @@ export default {
 
       console.log(postBody);
       const response = fetch(
-        `https://ecomuvaca.herokuapp.com/api/Category/${this.$route.params.id}/addSubCategory
+        `http://localhost:8085/api/Category/${this.$route.params.id}/addSubCategory
 `,
         postBody
       )
@@ -310,7 +310,7 @@ export default {
             }
           };
           const response = await fetch(
-            `https://ecomuvaca.herokuapp.com/api/Category/${this.$route.params.id}/getSubCategoryByCategoryId`,
+            `http://localhost:8085/api/Category/${this.$route.params.id}/getSubCategoryByCategoryId`,
 
             postBody
           );
@@ -346,7 +346,7 @@ export default {
         };
 
         await fetch(
-          `https://ecomuvaca.herokuapp.com/api/Category/${id}/deleteSubCategoryBySubCategoryId`,
+          `http://localhost:8085/api/Category/${id}/deleteSubCategoryBySubCategoryId`,
           postBody
         ).then(async () => {
           const auth_token = await localforage.getItem("my_access_token");
@@ -358,7 +358,7 @@ export default {
             }
           };
           const response = await fetch(
-            `https://ecomuvaca.herokuapp.com/api/Category/${this.$route.params.id}/getSubCategoryByCategoryId`,
+            `http://localhost:8085/api/Category/${this.$route.params.id}/getSubCategoryByCategoryId`,
 
             postBody
           );

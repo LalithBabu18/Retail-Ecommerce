@@ -12,6 +12,8 @@ import Items from "../views/Items";
 import ItemStocks from "../views/ItemStocks";
 import ProductDetails from "../views/ProductDetails";
 import CartsPage from "../views/CartsPage";
+import AdminPage from "../views/AdminPage";
+
 
 
 import Home from "../views/Home.vue";
@@ -36,6 +38,11 @@ const routes = [{
         path: "/SignUp",
         name: "SignUp",
         component: SignUp
+    },
+    {
+        path: "/AdminPage",
+        name: "AdminPage",
+        component: AdminPage
     },
     {
         path: "/CustomerSignup",

@@ -21,8 +21,8 @@ export function login({
     accountResourceService.login(payload).then(async(resp) => {
         // console.log(resp.access_token, resp.error);
 
- 
-        if (resp.access_token && !resp.error && resp.role ==="merchant") {
+
+        if (resp.access_token && !resp.error && resp.role === "merchant") {
             commit("m_loginFlag", true);
             localforage.setItem("my_access_token", resp.access_token);
             localforage.setItem("id", resp.userId);
@@ -30,10 +30,9 @@ export function login({
             localforage.setItem("name", resp.name);
 
             // alert("login");
-             router.push("/categories");
+            router.push("/categories");
             // this.$router.push("/dashboard");
-        }
-       else if (resp.access_token && !resp.error && resp.role =="customer" ) {
+        } else if (resp.access_token && !resp.error && resp.role == "customer") {
             commit("m_loginFlag", true);
             localforage.setItem("my_access_token", resp.access_token);
             localforage.setItem("id", resp.userId);
@@ -41,16 +40,25 @@ export function login({
             localforage.setItem("name", resp.name);
 
             // alert("login");
-             router.push("/HomeScreen");
+            router.push("/HomeScreen");
             // this.$router.push("/dashboard");
-        }
-         else {
+        } else if (resp.access_token && !resp.error && resp.role == "admin") {
+            commit("m_loginFlag", true);
+            localforage.setItem("my_access_token", resp.access_token);
+            localforage.setItem("id", resp.userId);
+            localforage.setItem("role", resp.role);
+            localforage.setItem("name", resp.name);
+
+            // alert("login");
+            router.push("/AdminPage");
+            // this.$router.push("/dashboard");
+        } else {
             commit("m_loginFlag", false);
             router.push("/");
             const v = "Invalid Username or Password"
             localforage.setItem("err", v);
             // throw "Invalid Username or Password"
-                // alert("please enter correct Username And password"); router.push("/login");
+            // alert("please enter correct Username And password"); router.push("/login");
         }
     });
 }

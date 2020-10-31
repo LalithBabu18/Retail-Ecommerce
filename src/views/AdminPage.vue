@@ -25,7 +25,23 @@
         </b-collapse>
       </b-navbar>
     </div>
-
+    <div style="margin:10px">
+      <select
+        v-model="selectedMerchant"
+        @change="
+          onCustomerChange();
+          onCustomerChange2();
+        "
+      >
+        <option disabled value="">Please select Customer </option>
+        <option
+          v-for="(item, index) in getAllMerchants"
+          :key="item.id"
+          :value="item.id"
+          >{{ item.name }}
+        </option>
+      </select>
+    </div>
     <div>
       <b-button v-b-toggle.collapse-2 class="m-1">Add Products</b-button>
       <b-collapse id="collapse-2">
@@ -162,183 +178,190 @@
             >
           </b-modal>
         </div>
-        <treeview v-for="(item, index) in list" :key="item.id">
-          <li data-expanded="false">
-            <span class="k-icon k-i-folder"></span>
-            {{ item.name }}
-            <v-button :id="item.id" variant="outline-success">
-              <i
-                @click="$bvModal.show(item.id)"
-                class="fa fa-plus"
-                style="font-size:10px;margin-left:20px;cursor:pointer;color:black;"
-              ></i>
-            </v-button>
-            <b-tooltip :target="item.id" triggers="hover" placement="right">
-              Click If you want to add subcategory under <b>{{ item.name }}</b>
-            </b-tooltip>
-            <v-button
-              :id="item.id"
-              href="javascript:;"
-              @click="deleteCat(item.id)"
-            >
-              <i
-                class="fa fa-trash"
-                style="font-size:10px;margin-left:20px;cursor:pointer;color:red;"
-              ></i>
-            </v-button>
-            <v-button @click="updateCat(item.id)">
-              <i
-                @click="$bvModal.show(item.id + 1)"
-                class="fas fa-pencil-alt"
-                style="font-size:10px;margin-left:20px;cursor:pointer;color:blue;"
+        <!-- <h6>{{ list }}</h6> -->
+        <div v-for="item in list" :key="item.id">
+          <treeview>
+            <li data-expanded="false">
+              <span class="k-icon k-i-folder"></span>
+              {{ item.name }}
+              <v-button :id="item.id" variant="outline-success">
+                <i
+                  @click="$bvModal.show(item.id)"
+                  class="fa fa-plus"
+                  style="font-size:10px;margin-left:20px;cursor:pointer;color:black;"
+                ></i>
+              </v-button>
+              <b-tooltip :target="item.id" triggers="hover" placement="right">
+                Click If you want to add subcategory under
+                <b>{{ item.name }}</b>
+              </b-tooltip>
+              <v-button
+                :id="item.id"
+                href="javascript:;"
+                @click="deleteCat(item.id)"
               >
-                <div>
-                  <b-modal :id="item.id + 1" hide-footer>
-                    <template v-slot:modal-title>
-                      <code>Enter rename of the category</code>
-                    </template>
-                    <div class="d-block text-center">
-                      <input
-                        type="text"
-                        class="login-input"
-                        placeholder="category"
-                        v-model="subCategories"
-                        required
-                      />
-                    </div>
-                    <b-button
-                      class="mt-3"
-                      block
-                      @click="updateCategory(item.id)"
-                      >Add SubCategory</b-button
-                    >
-                  </b-modal>
-                </div>
-              </i>
-            </v-button>
-
-            <ul>
-              <li
-                data-expanded="false"
-                v-for="(post, index) in item.subCategoryArr"
-                :key="post.id"
-              >
-                <span class="k-icon k-i-folder"></span>{{ post.name }}
-                <v-button :id="post.id" variant="outline-success">
-                  <i
-                    @click="$bvModal.show(post.id)"
-                    class="fa fa-plus"
-                    style="font-size:10px;margin-left:20px;cursor:pointer;color:black;"
-                  ></i>
+                <i
+                  class="fa fa-trash"
+                  style="font-size:10px;margin-left:20px;cursor:pointer;color:red;"
+                ></i>
+              </v-button>
+              <v-button @click="updateCat(item.id)">
+                <i
+                  @click="$bvModal.show(item.id + 1)"
+                  class="fas fa-pencil-alt"
+                  style="font-size:10px;margin-left:20px;cursor:pointer;color:blue;"
+                >
                   <div>
-                    <b-modal :id="post.id" hide-footer>
+                    <b-modal :id="item.id + 1" hide-footer>
                       <template v-slot:modal-title>
-                        <code>Enter Name of the Item</code>
+                        <code>Enter rename of the category</code>
                       </template>
                       <div class="d-block text-center">
                         <input
                           type="text"
                           class="login-input"
                           placeholder="category"
-                          v-model="itemName"
+                          v-model="subCategories"
                           required
                         />
                       </div>
                       <b-button
                         class="mt-3"
                         block
-                        @click="addItems(post.id, item.id)"
-                        >Add Item</b-button
+                        @click="updateCategory(item.id)"
+                        >Add SubCategory</b-button
                       >
                     </b-modal>
                   </div>
-                </v-button>
-                <b-tooltip :target="post.id" triggers="hover" placement="right">
-                  Click If you want to add Item under
-                  <b>{{ post.name }}</b>
-                </b-tooltip>
-                <v-button :id="post.id" @click="deleteSub(post.id)">
-                  <i
-                    class="fa fa-trash"
-                    style="font-size:10px;margin-left:20px;cursor:pointer;color:red;"
-                  ></i>
-                </v-button>
-                <v-button @click="updateSub(post.id)">
-                  <i
-                    @click="$bvModal.show(post.id + 1)"
-                    class="fas fa-pencil-alt"
-                    style="font-size:10px;margin-left:20px;cursor:pointer;color:blue;"
-                  >
+                </i>
+              </v-button>
+
+              <ul>
+                <li
+                  data-expanded="false"
+                  v-for="(post, index) in item.subCategoryArr"
+                  :key="post.id"
+                >
+                  <span class="k-icon k-i-folder"></span>{{ post.name }}
+                  <v-button :id="post.id" variant="outline-success">
+                    <i
+                      @click="$bvModal.show(post.id)"
+                      class="fa fa-plus"
+                      style="font-size:10px;margin-left:20px;cursor:pointer;color:black;"
+                    ></i>
                     <div>
-                      <b-modal :id="post.id + 1" hide-footer>
+                      <b-modal :id="post.id" hide-footer>
                         <template v-slot:modal-title>
-                          <code> rename of the category</code>
+                          <code>Enter Name of the Item</code>
                         </template>
                         <div class="d-block text-center">
                           <input
                             type="text"
                             class="login-input"
                             placeholder="category"
-                            v-model="subCategories1"
+                            v-model="itemName"
                             required
                           />
                         </div>
                         <b-button
                           class="mt-3"
                           block
-                          @click="updateSubCat(post.id)"
-                          >Add SubCategory</b-button
+                          @click="addItems(post.id, item.id)"
+                          >Add Item</b-button
                         >
                       </b-modal>
                     </div>
-                  </i>
-                </v-button>
+                  </v-button>
+                  <b-tooltip
+                    :target="post.id"
+                    triggers="hover"
+                    placement="right"
+                  >
+                    Click If you want to add Item under
+                    <b>{{ post.name }}</b>
+                  </b-tooltip>
+                  <v-button :id="post.id" @click="deleteSub(post.id)">
+                    <i
+                      class="fa fa-trash"
+                      style="font-size:10px;margin-left:20px;cursor:pointer;color:red;"
+                    ></i>
+                  </v-button>
+                  <v-button @click="updateSub(post.id)">
+                    <i
+                      @click="$bvModal.show(post.id + 1)"
+                      class="fas fa-pencil-alt"
+                      style="font-size:10px;margin-left:20px;cursor:pointer;color:blue;"
+                    >
+                      <div>
+                        <b-modal :id="post.id + 1" hide-footer>
+                          <template v-slot:modal-title>
+                            <code> rename of the category</code>
+                          </template>
+                          <div class="d-block text-center">
+                            <input
+                              type="text"
+                              class="login-input"
+                              placeholder="category"
+                              v-model="subCategories1"
+                              required
+                            />
+                          </div>
+                          <b-button
+                            class="mt-3"
+                            block
+                            @click="updateSubCat(post.id)"
+                            >Add SubCategory</b-button
+                          >
+                        </b-modal>
+                      </div>
+                    </i>
+                  </v-button>
 
-                <ul>
-                  <li v-for="(i, index) in post.items" :key="i.id">
-                    <span class="k-icon k-i-image"></span>{{ i.name }}
-                    <v-button :id="i.id" @click="deleteItem(i.id)">
-                      <i
-                        class="fa fa-trash"
-                        style="font-size:10px;margin-left:20px;cursor:pointer;color:red;"
-                      ></i>
-                    </v-button>
-                    <v-button @click="updateItems(i.id)">
-                      <i
-                        @click="$bvModal.show(i.id + 1)"
-                        class="fas fa-pencil-alt"
-                        style="font-size:10px;margin-left:20px;cursor:pointer;color:blue;"
-                      >
-                        <div>
-                          <b-modal :id="i.id + 1" hide-footer>
-                            <template v-slot:modal-title>
-                              <code> rename of the Item</code>
-                            </template>
-                            <div class="d-block text-center">
-                              <input
-                                type="text"
-                                class="login-input"
-                                placeholder="category"
-                                v-model="Items1"
-                                required
-                              />
-                            </div>
-                            <b-button
-                              class="mt-3"
-                              block
-                              @click="updateItem(i.id)"
-                              >Add SubCategory</b-button
-                            >
-                          </b-modal>
-                        </div></i
-                      >
-                    </v-button>
-                  </li>
-                  <!-- <li><span class="k-icon k-i-image"></span>body-back.png</li>
+                  <ul>
+                    <li v-for="(i, index) in post.items" :key="i.id">
+                      <span class="k-icon k-i-image"></span>{{ i.name }}
+                      <v-button :id="i.id" @click="deleteItem(i.id)">
+                        <i
+                          class="fa fa-trash"
+                          style="font-size:10px;margin-left:20px;cursor:pointer;color:red;"
+                        ></i>
+                      </v-button>
+                      <v-button @click="updateItems(i.id)">
+                        <i
+                          @click="$bvModal.show(i.id + 1)"
+                          class="fas fa-pencil-alt"
+                          style="font-size:10px;margin-left:20px;cursor:pointer;color:blue;"
+                        >
+                          <div>
+                            <b-modal :id="i.id + 1" hide-footer>
+                              <template v-slot:modal-title>
+                                <code> rename of the Item</code>
+                              </template>
+                              <div class="d-block text-center">
+                                <input
+                                  type="text"
+                                  class="login-input"
+                                  placeholder="category"
+                                  v-model="Items1"
+                                  required
+                                />
+                              </div>
+                              <b-button
+                                class="mt-3"
+                                block
+                                @click="updateItem(i.id)"
+                                >Add SubCategory</b-button
+                              >
+                            </b-modal>
+                          </div></i
+                        >
+                      </v-button>
+                    </li>
+                    <!-- <li><span class="k-icon k-i-image"></span>body-back.png</li>
                         <li><span class="k-icon k-i-image"></span>my-photo.jpg</li> -->
-                </ul>
-              </li>
-              <!-- <li data-expanded="true">
+                  </ul>
+                </li>
+                <!-- <li data-expanded="true">
                     <span class="k-icon k-i-folder"></span>resources
                     <ul>
                         <li data-expanded="true">
@@ -355,28 +378,29 @@
                 <li><span class="k-icon k-i-html5"></span>contacts.html</li>
                 <li><span class="k-icon k-i-html5"></span>index.html</li>
                 <li><span class="k-icon k-i-html5"></span>portfolio.html</li> -->
-            </ul>
-          </li>
-          <div>
-            <b-modal :id="item.id" hide-footer>
-              <template v-slot:modal-title>
-                <code>Enter Name of the Subcategory</code>
-              </template>
-              <div class="d-block text-center">
-                <input
-                  type="text"
-                  class="login-input"
-                  placeholder="Sub-category"
-                  v-model="SubName"
-                  required
-                />
-              </div>
-              <b-button class="mt-3" block @click="addSubCategory(item.id)"
-                >Add SubCategory</b-button
-              >
-            </b-modal>
-          </div>
-        </treeview>
+              </ul>
+            </li>
+            <div>
+              <b-modal :id="item.id" hide-footer>
+                <template v-slot:modal-title>
+                  <code>Enter Name of the Subcategory</code>
+                </template>
+                <div class="d-block text-center">
+                  <input
+                    type="text"
+                    class="login-input"
+                    placeholder="Sub-category"
+                    v-model="SubName"
+                    required
+                  />
+                </div>
+                <b-button class="mt-3" block @click="addSubCategory(item.id)"
+                  >Add SubCategory</b-button
+                >
+              </b-modal>
+            </div>
+          </treeview>
+        </div>
       </div>
       <div id="right">
         <div>
@@ -421,6 +445,7 @@ export default {
   data() {
     return {
       SubName: "",
+      selectedMerchant: "",
       UserName: "",
       Categoryname: "",
       categorySelected2: [],
@@ -446,6 +471,7 @@ export default {
       price: "",
       tag: "",
       color: "",
+      getAllMerchants: [],
       itemStocks: [],
       list: [],
       onMountStocks: [],
@@ -473,32 +499,6 @@ export default {
   },
   async created() {
     this.UserName = await localforage.getItem("name");
-    const auth_token = await localforage.getItem("my_access_token");
-    let categorySelected1 = "";
-    let subCatSelected2 = "";
-    console.log(subCatSelected2, "subCatSelected2");
-    const postBody = {
-      method: "GET",
-      headers: {
-        Authorization: auth_token,
-        "Content-Type": "application/json"
-      }
-    };
-    const response = await fetch(
-      `http://localhost:8085/api/Category/getCategoryAndStockByListOfCategoryIds?categoryIds=${categorySelected1}&subCategoryIds=${subCatSelected2}`,
-
-      postBody
-    );
-    console.log(response, "onMountStocksCreated");
-
-    const data = await response.json();
-    console.log(data, "categoryNullkkkkkkkk");
-
-    if (!data.error) {
-      this.onMountStocks = data;
-    } else {
-      console.log("error in getting latest subCategories");
-    }
   },
 
   mounted() {
@@ -511,6 +511,15 @@ export default {
         console.log("error in getting categories");
       }
     });
+    userReports.getAllMerchants().then(resp => {
+      console.log(resp, "categories");
+
+      if (!resp.error) {
+        this.getAllMerchants = resp;
+      } else {
+        console.log("error in getting getAllMerchants");
+      }
+    });
     userReports.getStocksByUserId().then(resp => {
       console.log(resp, "categories");
 
@@ -520,11 +529,61 @@ export default {
         console.log("error in getting getStocksByUserId");
       }
     });
-    userReports.getList().then(resp => {
-      if (!resp.error) {
-        console.log(resp, "getList");
-        let data = resp;
-        let dataMod = data.map(d => {
+  },
+  methods: {
+    async onCustomerChange2() {
+      console.log("chsnge ");
+      const auth_token = await localforage.getItem("my_access_token");
+      let categorySelected1 = "";
+      let subCatSelected2 = "";
+      console.log(subCatSelected2, "subCatSelected2");
+      const postBody = {
+        method: "GET",
+        headers: {
+          Authorization: auth_token,
+          "Content-Type": "application/json"
+        }
+      };
+      const response = await fetch(
+        `http://localhost:8085/api/Category/${this.selectedMerchant}/getCategoryAndStockByUserIdAndListOfCategoryIds?categoryIds=${categorySelected1}&subCategoryIds=${subCatSelected2}`,
+
+        postBody
+      );
+      console.log(response, "onMountStocksCreated");
+
+      const data = await response.json();
+      console.log(data, "categoryNullkkkkkkkk");
+
+      if (!data.error) {
+        this.onMountStocks = data;
+      } else {
+        console.log("error in getting latest subCategories");
+      }
+    },
+    async onCustomerChange() {
+      console.log(this.selectedMerchant, "this.selectedMerchant");
+      const auth_token = await localforage.getItem("my_access_token");
+      const postBody = {
+        method: "GET",
+        headers: {
+          Authorization: auth_token,
+          "Content-Type": "application/json"
+        }
+      };
+      const response = await fetch(
+        `http://localhost:8085/api/Cart/${this.selectedMerchant}/getAllByUserId`,
+
+        postBody
+      );
+      console.log(response, "jhiuuhkhyioukjljhihuj");
+
+      const data = await response.json();
+      console.log(data, "reportHistory");
+
+      if (!data.error) {
+        console.log(data, "getList");
+        let data1 = data;
+        let dataMod = data1.map(d => {
           let sub = _.chunk(d[1], 2);
           let subCategoryArr = sub.map(s => {
             return { ...s[0], items: s[1] };
@@ -535,13 +594,9 @@ export default {
         console.log(dataMod, "dat5a");
         this.list = dataMod;
         console.log(this.list, "list");
-        console.log(this.list.subCategoryArr, "list2");
-      } else {
-        console.log("error in getting lists");
       }
-    });
-  },
-  methods: {
+    },
+
     async addCategory() {
       let form = {
         name: this.name
@@ -641,7 +696,6 @@ export default {
           alert("updated");
           this.$bvModal.hide(subid);
           this.name = "";
-          window.location.reload();
         });
       // console.log(response, "updated");
     },
@@ -652,7 +706,7 @@ export default {
       router.go(-1);
     },
     async onChange() {
-      // console.log(id, "subcategoryid");
+      console.log(id, "subcategoryid");
       const auth_token = await localforage.getItem("my_access_token");
       const postBody = {
         method: "GET",
@@ -832,7 +886,6 @@ export default {
         .then(() => {
           alert("updated");
           this.$bvModal.hide(id + 1);
-          window.location.reload();
         })
         .then(() => {
           userReports.getList().then(resp => {
@@ -903,8 +956,6 @@ export default {
         .then(() => {
           alert("updated");
           this.$bvModal.hide(1);
-          window.location.reload();
-
           this.name = "";
         });
       // console.log(response, "updated");
@@ -957,7 +1008,6 @@ export default {
           alert("updated");
           this.$bvModal.hide(id);
           this.SubName = "";
-          window.location.reload();
         });
       // console.log(response, "updated");
     },
@@ -1257,7 +1307,7 @@ export default {
         }
       };
       const response = await fetch(
-        `http://localhost:8085/api/Category/getCategoryAndStockByListOfCategoryIds?categoryIds=${categorySelected1}&subCategoryIds=${subCatSelected2}`,
+        `http://localhost:8085/api/Category/${this.selectedMerchant}/getCategoryAndStockByUserIdAndListOfCategoryIds?categoryIds=${categorySelected1}&subCategoryIds=${subCatSelected2}`,
 
         postBody
       );
@@ -1312,6 +1362,44 @@ i {
   /* background-color: green; */
   width: 40%;
   margin-bottom: 10%;
+}
+ul,
+#myUL {
+  list-style-type: none;
+}
+
+#myUL {
+  margin: 0;
+  padding: 0;
+}
+
+.caret {
+  cursor: pointer;
+  -webkit-user-select: none; /* Safari 3.1+ */
+  -moz-user-select: none; /* Firefox 2+ */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none;
+}
+
+.caret::before {
+  content: "\25B6";
+  color: black;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.caret-down::before {
+  -ms-transform: rotate(90deg); /* IE 9 */
+  -webkit-transform: rotate(90deg); /* Safari */
+  transform: rotate(90deg);
+}
+
+.nested {
+  display: none;
+}
+
+.active {
+  display: block;
 }
 
 /* Media Query for Tablets Ipads portrait mode */

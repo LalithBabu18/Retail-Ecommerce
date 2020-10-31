@@ -35,7 +35,7 @@ export default class User {
             },
         };
         const response = await fetch(
-            `https://ecomuvaca.herokuapp.com/api/Category/getAllCategories`,
+            `http://localhost:8085/api/Category/getAllCategories`,
             postBody
         );
 
@@ -52,7 +52,7 @@ export default class User {
             },
         };
         const response = await fetch(
-            `https://ecomuvaca.herokuapp.com/api/Cart/getAllByUserLoggedIn`,
+            `http://localhost:8085/api/Cart/getAllByUserLoggedIn`,
             postBody
         );
 
@@ -69,7 +69,7 @@ export default class User {
             },
         };
         const response = await fetch(
-            `https://ecomuvaca.herokuapp.com/api/Cart/getStocksForUserLoggedIn`,
+            `http://localhost:8085/api/Cart/getStocksForUserLoggedIn`,
             postBody
         );
 
@@ -86,7 +86,7 @@ export default class User {
             },
         };
         const response = await fetch(
-            `https://ecomuvaca.herokuapp.com/api/Category/categories`,
+            `http://localhost:8085/api/Category/categories`,
             postBody
         );
 
@@ -103,7 +103,44 @@ export default class User {
             },
         };
         const response = await fetch(
-            `https://ecomuvaca.herokuapp.com/api/Category/getAllStocks`,
+            `http://localhost:8085/api/Category/getAllStocks`,
+            postBody
+        );
+
+        const data = await response.json();
+        console.log(data, "response History");
+        return data;
+    }
+    async getAllMerchants() {
+        const auth_token = await localforage.getItem("my_access_token");
+        const postBody = {
+            method: "GET",
+            headers: {
+                Authorization: auth_token,
+            },
+        };
+        const response = await fetch(
+            `
+            http://localhost:8085/api/users/getAllMerchants`,
+            postBody
+        );
+
+        const data = await response.json();
+        console.log(data, "response History");
+        return data;
+    }
+    async getListByUserId(id) {
+        const auth_token = await localforage.getItem("my_access_token");
+        const postBody = {
+            method: "GET",
+            headers: {
+                Authorization: auth_token,
+            },
+        };
+        const response = await fetch(
+            `
+            http://localhost:8085/api/users/${id}/getAllByUserId"
+            `,
             postBody
         );
 

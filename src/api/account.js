@@ -24,7 +24,7 @@ export default class Account {
         };
 
         const response = await fetch(
-            `https://ecomuvaca.herokuapp.com/api/users/login`,
+            `http://localhost:8085/api/users/login`,
             postBody
         );
         const data = await response.json();
@@ -44,7 +44,7 @@ export default class Account {
                 Authorization: authToken
             }
         };
-        const response = await fetch(`https://ecomuvaca.herokuapp.com/api/users/logout`, request);
+        const response = await fetch(`http://localhost:8085/api/users/logout`, request);
         const data = await response.json();
         router.push('/login');
         return data;
